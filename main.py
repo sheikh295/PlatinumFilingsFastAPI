@@ -133,42 +133,11 @@ db_dependency = Annotated[Session, Depends(getDB)]
 def root():
     return {"Hello": "Welcome to FAST API"}
 
+
 @app.get("/healthCheck")
 def healthCheck():
     return {"Health Status": "OKAY"}
 
-#--------------Below Two Routes are for Debugging Purposes------------------#
-
-# @app.get("/getsqlalchemy")
-# async def getOne(db: db_dependency):
-#     result = db.query(models.Cordataq4).limit(5).all()
-#     return result
-
-
-# @app.get("/getsqlraw")
-# async def getAll(db: db_dependency):
-#     try:
-#         query = text(f"SELECT * FROM cordataq4 LIMIT 5")
-#         result = db.execute(query)
-        
-#         column_names = result.keys()
-        
-#         rows = result.fetchall()
-        
-#         if rows:
-#             data = []
-#             for row in rows:
-#                 row_dict = dict(zip(column_names, row))
-#                 data.append(row_dict)
-#             return data
-#         else:
-#             raise HTTPException(status_code=404, detail="No data found")
-#     except HTTPException:
-#         raise
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
-#         raise HTTPException(status_code=500, detail="Internal server error")
-    
     
 @app.get("/getById/{user_id}", response_model=Item)
 async def get_by_id(user_id: int, db: db_dependency):
@@ -207,3 +176,37 @@ async def add_data(item: Item, db: db_dependency):
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Failed to add data: {str(e)}")
+    
+
+
+#--------------Below Two Routes are for Debugging Purposes------------------#
+
+# @app.get("/getsqlalchemy")
+# async def getOne(db: db_dependency):
+#     result = db.query(models.Cordataq4).limit(5).all()
+#     return result
+
+
+# @app.get("/getsqlraw")
+# async def getAll(db: db_dependency):
+#     try:
+#         query = text(f"SELECT * FROM cordataq4 LIMIT 5")
+#         result = db.execute(query)
+        
+#         column_names = result.keys()
+        
+#         rows = result.fetchall()
+        
+#         if rows:
+#             data = []
+#             for row in rows:
+#                 row_dict = dict(zip(column_names, row))
+#                 data.append(row_dict)
+#             return data
+#         else:
+#             raise HTTPException(status_code=404, detail="No data found")
+#     except HTTPException:
+#         raise
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
+#         raise HTTPException(status_code=500, detail="Internal server error")
