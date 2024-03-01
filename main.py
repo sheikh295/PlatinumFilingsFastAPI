@@ -27,18 +27,9 @@ app = FastAPI(
 )
 models.Base.metadata.create_all(bind=engine)
 
-origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:5173",
-    "https://localhost:5173",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["https://phpstack-961691-4302635.cloudwaysapps.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -141,6 +132,10 @@ db_dependency = Annotated[Session, Depends(getDB)]
 @app.get("/")
 def root():
     return {"Hello": "Welcome to FAST API"}
+
+@app.get("/healthCheck")
+def healthCheck():
+    return {"Health Status": "OKAY"}
 
 #--------------Below Two Routes are for Debugging Purposes------------------#
 
